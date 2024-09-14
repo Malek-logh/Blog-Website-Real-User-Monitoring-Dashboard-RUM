@@ -4,6 +4,11 @@
 
 This project aims to develop a Real User Monitoring (RUM) Dashboard for a blog website using advanced analytics tools. The dashboard centralizes data and allows real-time analysis of user interactions to improve decision-making.
 
+## System Architecture
+
+![architecture.jpg](architecture.jpg)
+
+
 ## Setting Up the Blog
 
 This project is based on the MERN blog repository. For detailed setup instructions, visit [GitHub - berthutapea/mern-blog-v2](https://github.com/berthutapea/mern-blog-v2).
@@ -57,4 +62,19 @@ This project is based on the MERN blog repository. For detailed setup instructio
 - **Full-Text Search**: Fast and relevant search capabilities.
 - **Scalability**: Easily add nodes for large data volumes.
 - **Real-Time Data Analysis**: Monitor logs and visualize data effectively.
+
+## Dashboard Screenshots
+
+
+- **General Metrics**:
+  ![General.png](General.png)
+
+- **Page views and Demographic data**:
+  ![Page views and Demographic data.png](Page%20views%20and%20Demographic%20data.png)
+
+- **API Calls and Task Results**:
+  ![API Calls and Task Results.png](API%20Calls%20andT%20ask%20Results.png)
+
+- **Tech**:
+  ![Tech.png](Tech.png)
 
