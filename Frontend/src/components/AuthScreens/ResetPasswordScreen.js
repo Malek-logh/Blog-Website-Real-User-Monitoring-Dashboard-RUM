@@ -1,96 +1,108 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import "../../Css/ResetPasswordScreen.css"
+import { useParams, useNavigate } from "react-router-dom";
+import "../../Css/ResetPasswordScreen.css";
+
+// Track task results function
+const trackTaskResult = (taskResult) => {
+  if (window.gtag) {
+    window.gtag('event', 'task_result', {
+      taskName: 'ResetPassword',
+      taskResult: taskResult
+    });
+  }
+};
 
 const ResetPasswordScreen = () => {
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmpassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const search = useLocation().search;
-  const token = search.split("=")[1]
+  const navigate = useNavigate();
+  const { resetToken } = useParams();
+
+  // Track page view event
+  useEffect(() => {
+    if (window.gtag) {
+      window.gtag('event', 'page_view', {
+        page_path: '/reset_password',
+        page_title: 'ResetPassword'
+      });
+    }
+  }, []);
 
   const resetPasswordHandler = async (e) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
+    if (password !== confirmpassword) {
       setPassword("");
       setConfirmPassword("");
-      setTimeout(() => {
-        setError("");
-      }, 5000);
-      return setError("Passwords don't match");
+      setError("Passwords do not match");
+
+      // Track task result as failure
+      trackTaskResult('Gave In');
+      return;
     }
 
     try {
       const { data } = await axios.put(
-        `/auth/resetpassword?resetPasswordToken=${token}`,
-        {
-          password,
-        }
+        `/auth/resetpassword/${resetToken}`,
+        { password }
       );
 
-      setSuccess(data.message);
+      setSuccess(data.data);
 
-    } catch (error) {
-
-      setError(error.response.data.error);
+      // Track task result as success
+      trackTaskResult('Completed');
 
       setTimeout(() => {
-        setError("");
-      }, 5000);
+        navigate('/login');
+      }, 2000);
+
+    } catch (error) {
+      setError(error.response.data.error);
+      setPassword("");
+      setConfirmPassword("");
+
+      // Track task result as failure
+      trackTaskResult('Gave In');
     }
   };
 
   return (
     <div className="Inclusive-resetPassword-page">
-      <form
-        onSubmit={resetPasswordHandler}
-        className="resetpassword-form"
-      >
-
-        <h3 >Reset Password</h3>
-
-        {error && <div className="error_msg">{error} </div>}
-
-        {success && (
-          <div className="success_msg">
-            {success} <Link to="/login">Login</Link>
+      <div className="resetPassword-big-wrapper">
+        <form onSubmit={resetPasswordHandler}>
+          <h3>Reset Your Password</h3>
+          {error && <div className="error_message">{error}</div>}
+          {success && <div className="success_message">{success}</div>}
+          <div className="input-wrapper">
+            <input
+              type="password"
+              required
+              id="password"
+              placeholder="Enter new password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <label htmlFor="password">New Password</label>
           </div>
-        )}
-
-        <div className="input-wrapper">
-          <input
-            type="password"
-            required
-            id="password"
-            placeholder="Enter new password"
-            autoComplete="true"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <label htmlFor="confirmpassword"> Password</label>
-        </div>
-
-        <div className="input-wrapper">
-
-          <input
-            type="password"
-            required
-            id="confirmpassword"
-            placeholder="Confirm new password"
-            autoComplete="true"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          <label htmlFor="confirmpassword">Confirm New Password</label>
-        </div>
-        <button className="resetPass-btn">
-          Reset Password
-        </button>
-
-      </form>
+          <div className="input-wrapper">
+            <input
+              type="password"
+              required
+              id="confirmpassword"
+              placeholder="Confirm new password"
+              value={confirmpassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            <label htmlFor="confirmpassword">Confirm Password</label>
+          </div>
+          <button type="submit">
+            Reset Password
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
