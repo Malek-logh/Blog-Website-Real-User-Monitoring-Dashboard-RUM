@@ -73,7 +73,7 @@ This project is based on the MERN blog repository. For detailed setup instructio
   ![Page views and Demographic data.png](Page%20views%20and%20Demographic%20data.png)
 
 - **API Calls and Task Results**:
-  ![API Calls and Task Results.png](API%20Calls%20andT%20ask%20Results.png)
+  ![API Calls and Task Results.png](API%20Calls%20and%20Task%20Results.png)
 
 - **Tech**:
   ![Tech.png](Tech.png)
